@@ -18,8 +18,20 @@
 
 // **--0x7F1F--**
 
+// --- Plugin Variables controlID Enumeration 
 
-// **--0x0F1F--**
+enum controlID {
+	masterPitchBend = 9,
+	masterTune = 19,
+	masterVolume_dB = 29,
+	lfo1Waveform = 50,
+	lfo1Mode = 51,
+	lfo1Frequency = 52,
+	lfo1DelayTime_mSec = 53,
+	lfo1RampTime_mSec = 54
+};
+
+	// **--0x0F1F--**
 
 /**
 \class PluginCore
@@ -107,6 +119,21 @@ public:
 
 private:
 	//  **--0x07FD--**
+
+	// --- Continuous Plugin Variables 
+	double masterPitchBend = 0.0;
+	double masterTune = 0.0;
+	double masterVolume_dB = 0.0;
+	double lfo1Frequency = 0.0;
+	double lfo1DelayTime_mSec = 0.0;
+	double lfo1RampTime_mSec = 0.0;
+
+	// --- Discrete Plugin Variables 
+	int lfo1Waveform = 0;
+	enum class lfo1WaveformEnum { Triangle,Sin,Saw,RSH,QRSH,Noise,QRNoise };	// to compare: if(compareEnumToInt(lfo1WaveformEnum::Triangle, lfo1Waveform)) etc... 
+
+	int lfo1Mode = 0;
+	enum class lfo1ModeEnum { Sync,One_Shot,Free_Run };	// to compare: if(compareEnumToInt(lfo1ModeEnum::Sync, lfo1Mode)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables

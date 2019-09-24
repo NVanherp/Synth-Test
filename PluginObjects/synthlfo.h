@@ -3,21 +3,90 @@
 #include "synthdefs.h"
 #include "guiconstants.h"
 
+
+/**
+\enum LFOWaveform
+
+\ingroup SynthDefs
+
+\brief LFO waveform type
+
+ - kTriangle : triangle wave
+
+ - kSin : sine wave
+
+ - kSaw : saw tooth wave
+
+ - kRSH : random sample and hold
+ 
+ - kQRSH : quasi-random sample and hold
+
+ - kNoise : random noise
+
+ - kQRNoise : quasi-random noise
+
+*/
 // --- LFO may have very diff waveforms from pitched output
 enum class LFOWaveform { kTriangle, kSin, kSaw, kRSH, kQRSH, kNoise, kQRNoise };
+
+/**
+\enum LFOMode
+
+\ingroup SynthDefs
+
+\brief LFO Mode of Operation
+
+ - kSync : LFO restarts with each new note event
+
+ - kOneShot : One cycle of LFO only
+
+ - kFreeRun : Oscillator free runs after first note on event
+
+*/
+
 enum class LFOMode { kSync, kOneShot, kFreeRun };
 
-// --- indexes in OscillatorOutputData::outputs array
+// --- indexes in OscillatorOutputData: inputs array
+
+
 enum {
 	kLFONormalOutput,			// 0
 	kLFONormalOutputInverted,	// 1 etc...
 	kLFOQuadPhaseOutput,
 	kLFOQuadPhaseOutputInverted,
-	kUnipolarOutputFromMax,		/* this mimics an INVERTED EG going from MAX -> MAX */
+	kUnipolarOutputFromMax,		///> this mimics an INVERTED EG going from MAX -> MAX */
 	kUnipolarOutputFromMin		/* this mimics an EG going from 0.0 -> MAX */
 };
 
+
+
+
 // ---
+/**
+\struct SynthLFOParameters
+
+\ingroup SynthDefs
+
+\brief LFO parameters
+
+ - waveform : the type of waveform
+
+ - mode : the mode of the LFO
+
+ - frequency_Hz : the frequency in Hz of the LFO
+
+ - outputAmplitue : the amplitude of the output
+
+*/
+
+inline double msecToSamples(double sampleRate, double timeMSec)
+
+{
+
+	return sampleRate * (timeMSec / 1000.0);;
+
+}
+
 struct SynthLFOParameters
 {
 	SynthLFOParameters() {}
@@ -31,6 +100,8 @@ struct SynthLFOParameters
 
 		frequency_Hz = params.frequency_Hz;
 		outputAmplitude = params.outputAmplitude;
+		delay = params.delay;
+		ramp = params.ramp;
 
 		return *this;
 	}
@@ -39,16 +110,38 @@ struct SynthLFOParameters
 	LFOWaveform waveform = LFOWaveform::kTriangle;
 	LFOMode mode = LFOMode::kSync;
 
-	double frequency_Hz = 0.0;
+	double frequency_Hz = 2.0;
 	double outputAmplitude = 1.0;
+	double delay = 0.0;
+	double ramp = 0.0;
+
+
 };
 
 
+/**
+\class SynthLFO
+\ingroup SynthClasses
+\brief Encapsulates a synth LFO
+
+Outputs: contains 6 outputs
+
+	- kLFONormalOutput			
+	- kLFONormalOutputInverted	
+	- kLFOQuadPhaseOutput
+	- kLFOQuadPhaseOutputInverted
+	- kUnipolarOutputFromMax	
+	- kUnipolarOutputFromMin		
+
+*/
 
 // --- LFO object, note ISynthOscillator
 class SynthLFO : public ISynthModulator//ISynthOscillator
 {
 public:
+
+	// --- Recieving midi input data
+
 	SynthLFO(const std::shared_ptr<MidiInputData> _midiInputData, std::shared_ptr<SynthLFOParameters> _parameters)
 		: midiInputData(_midiInputData) 
 	, parameters(_parameters){
@@ -70,6 +163,9 @@ public:
 		modCounter = 0.0;			///< modulo counter [0.0, +1.0]
 		modCounterQP = 0.25;		///<Quad Phase modulo counter [0.0, +1.0]
 
+		lfodelay.resetTimer();
+		rampTime.resetTimer();
+
 		return true;
 	}
 
@@ -82,8 +178,12 @@ public:
 		{
 			modCounter = 0.0;			///< modulo counter [0.0, +1.0]
 			modCounterQP = 0.25;		///< Quad Phase modulo counter [0.0, +1.0]
+
+			lfodelay.resetTimer();
+			rampTime.resetTimer();
 		}
 	
+		parameters->outputAmplitude = 0.0;
 		randomSHCounter = -1; // -1 = reset
 		return true; 
 	}
@@ -118,6 +218,11 @@ protected:
 
 	// --- sample rate
 	double sampleRate = 0.0;			///< sample rate
+
+
+	Timer lfodelay;
+	Timer rampTime;
+
 
 	// --- timebase variables
 	double modCounter = 0.0;			///< modulo counter [0.0, +1.0]
@@ -154,7 +259,7 @@ protected:
 	}
 
 	/**
-	\struct checkAndWrapModulo
+	\struct advanceAndCheckWrapModulo
 	\brief Advance, and then check a modulo counter and wrap it if necessary
 	*/
 	inline bool advanceAndCheckWrapModulo(double& moduloCounter, double phaseInc)

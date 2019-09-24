@@ -24,6 +24,50 @@ const ModOutputData SynthLFO::renderModulatorOutput()
 	{
 		return lfoOutputData;
 	}
+	
+	//if (parameters->ramp > 0.0) {
+	//	double d = msecToSamples(sampleRate, parameters->ramp);
+	//	rampTime.setTargetValueInSamples(d);
+	//	int temp = 0;
+	//	if (!(rampTime.timerExpired())) {
+
+	//		temp = parameters->outputAmplitude;
+	//		parameters->outputAmplitude = temp + (1 / d);
+	//		rampTime.advanceTimer();
+
+	//	}
+	//}
+
+
+	//This is the implementation of the lfo delay
+	double dd = msecToSamples(sampleRate, parameters->delay);
+	lfodelay.setTargetValueInSamples(dd);
+	if(!(lfodelay.timerExpired()))
+	{
+		lfodelay.advanceTimer();
+		if (parameters->mode == LFOMode::kOneShot || parameters->mode == LFOMode::kSync)
+		{
+			return lfoOutputData;
+		}
+
+		if (parameters->mode == LFOMode::kFreeRun)
+		{
+			return lfoOutputData;
+		}
+	}
+	//implementing the lfo output ramp
+	else if (parameters->ramp > 0.0) {
+		double d = msecToSamples(sampleRate, parameters->ramp); //establishing the timer
+		rampTime.setTargetValueInSamples(d);
+		if (!(rampTime.timerExpired())) {
+			//need to figure out how to make outputAmplitude start at 0
+			parameters->outputAmplitude = parameters->outputAmplitude + (1 / d);
+			rampTime.advanceTimer();
+
+			return lfoOutputData;
+		}
+	};
+
 
 	// --- always first!
 	bool bWrapped = checkAndWrapModulo(modCounter, phaseInc);

@@ -232,6 +232,7 @@
     <ClInclude Include="..\PluginKernel\pluginparameter.h" />
     <ClInclude Include="..\PluginKernel\pluginstructures.h" />
     <ClInclude Include="..\PluginObjects\analogsaw.h" />
+    <ClInclude Include="..\PluginObjects\analog_square_1.h" />
     <ClInclude Include="..\PluginObjects\dca_eg.h" />
     <ClInclude Include="..\PluginObjects\fxobjects.h" />
     <ClInclude Include="..\PluginObjects\filters.h" />
@@ -256,6 +257,11 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PluginGUIMain.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\docs\AddingDoxygenSupport.txt" />
+    <Text Include="..\docs\mainpage.txt" />
+    <Text Include="..\docs\oscillators.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
