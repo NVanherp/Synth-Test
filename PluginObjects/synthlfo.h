@@ -102,6 +102,8 @@ struct SynthLFOParameters
 		outputAmplitude = params.outputAmplitude;
 		delay = params.delay;
 		ramp = params.ramp;
+		waveShapeX = params.waveShapeX;
+		waveShapeY = params.waveShapeY;
 
 		return *this;
 	}
@@ -114,7 +116,8 @@ struct SynthLFOParameters
 	double outputAmplitude = 1.0;
 	double delay = 0.0;
 	double ramp = 0.0;
-
+	double waveShapeX = 0.0;
+	double waveShapeY = 0.0;
 
 };
 
@@ -162,6 +165,7 @@ public:
 		// --- timebase variables
 		modCounter = 0.0;			///< modulo counter [0.0, +1.0]
 		modCounterQP = 0.25;		///<Quad Phase modulo counter [0.0, +1.0]
+		modT = 0.0;
 
 		lfodelay.resetTimer();
 		rampTime.resetTimer();
@@ -176,20 +180,23 @@ public:
 		renderComplete = false;
 		if (parameters->mode == LFOMode::kSync || parameters->mode == LFOMode::kOneShot)
 		{
-			modCounter = 0.0;			///< modulo counter [0.0, +1.0]
+			//modCounter = 0.0;			///< modulo counter [0.0, +1.0]
 			modCounterQP = 0.25;		///< Quad Phase modulo counter [0.0, +1.0]
-
+			modCounter = parameters->waveShapeX;
+			phaseInc = parameters->waveShapeY;
 			lfodelay.resetTimer();
 			rampTime.resetTimer();
+
 		}
 	
-		parameters->outputAmplitude = 0.0;
+
 		randomSHCounter = -1; // -1 = reset
 		return true; 
 	}
 
 	virtual bool doNoteOff(double midiPitch, uint32_t _midiNoteNumber, uint32_t midiNoteVelocity)
 	{
+		if (parameters->ramp > 0.0) parameters->outputAmplitude = 0.0;
 		return true; 
 	}
 
@@ -229,6 +236,8 @@ protected:
 	double phaseInc = 0.0;				///< phase inc = fo/fs
 	double modCounterQP = 0.25;			///< Quad Phase modulo counter [0.0, +1.0]
 	bool renderComplete = false;		///< flag for one-shot
+
+	double modT = 0.0;
 
 	// --- 32-bit register for RS&H
 	uint32_t pnRegister = 0;			///< 32 bit register for PN oscillator

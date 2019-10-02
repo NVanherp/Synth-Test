@@ -4,12 +4,55 @@
 bool SynthLFO::update(bool updateAllModRoutings)
 {
 	// --- Run priority modulators 
+	double bipolarFMod = modulators->modulationInputs[kFrequencyMod];
+	double range = (20.0 - 0.02) / 2.0;
+
+	//double modVal = range * bipolarFMod;
+	//boundValue(modVal, 0.02, 20);
+
+	bipolarFMod *= range;
+	bipolarFMod += parameters->frequency_Hz;
+	boundValue(bipolarFMod, 0.02, 20);
+
+
+	///this for some reason breaks the LFO. interesting.
+	//modCounter = parameters->waveShapeX;
+
 
 	// --- End Priority modulators
 	if (!updateAllModRoutings)
 		return true;
+	//line for final LFO freq (GUI + modulated)
 
-	phaseInc = parameters->frequency_Hz / sampleRate;
+	double d = msecToSamples(sampleRate, parameters->ramp); //establishing the timer
+	rampTime.setTargetValueInSamples(d);
+		//implementing the lfo output ramp
+	if (parameters->ramp > 0.0) {
+
+		if (!(rampTime.timerExpired())) {
+			//need to figure out how to make outputAmplitude start at 0
+				parameters->outputAmplitude = parameters->outputAmplitude + (1 / d);
+				rampTime.advanceTimer();
+
+		}
+	};
+
+	double leftSlope = (parameters->waveShapeY) / (parameters->waveShapeX);
+	double rightSlope = (1 - parameters->waveShapeY) / (1 - parameters->waveShapeX);
+
+	if (modCounter < parameters->waveShapeY)
+	{
+		phaseInc = bipolarFMod / sampleRate * leftSlope;
+	}
+	else
+	{
+		phaseInc = bipolarFMod / sampleRate * rightSlope;
+
+	}
+
+	//phaseInc = parameters->frequency_Hz / sampleRate;
+
+	//modify based on modulation frequency applied
 
 	return true;
 }
@@ -25,19 +68,6 @@ const ModOutputData SynthLFO::renderModulatorOutput()
 		return lfoOutputData;
 	}
 	
-	//if (parameters->ramp > 0.0) {
-	//	double d = msecToSamples(sampleRate, parameters->ramp);
-	//	rampTime.setTargetValueInSamples(d);
-	//	int temp = 0;
-	//	if (!(rampTime.timerExpired())) {
-
-	//		temp = parameters->outputAmplitude;
-	//		parameters->outputAmplitude = temp + (1 / d);
-	//		rampTime.advanceTimer();
-
-	//	}
-	//}
-
 
 	//This is the implementation of the lfo delay
 	double dd = msecToSamples(sampleRate, parameters->delay);
@@ -55,18 +85,18 @@ const ModOutputData SynthLFO::renderModulatorOutput()
 			return lfoOutputData;
 		}
 	}
-	//implementing the lfo output ramp
-	else if (parameters->ramp > 0.0) {
-		double d = msecToSamples(sampleRate, parameters->ramp); //establishing the timer
-		rampTime.setTargetValueInSamples(d);
-		if (!(rampTime.timerExpired())) {
-			//need to figure out how to make outputAmplitude start at 0
-			parameters->outputAmplitude = parameters->outputAmplitude + (1 / d);
-			rampTime.advanceTimer();
+	////implementing the lfo output ramp
+	//else if (parameters->ramp > 0.0) {
+	//	double d = msecToSamples(sampleRate, parameters->ramp); //establishing the timer
+	//	rampTime.setTargetValueInSamples(d);
+	//	if (!(rampTime.timerExpired())) {
+	//		//need to figure out how to make outputAmplitude start at 0
+	//		parameters->outputAmplitude = parameters->outputAmplitude + (1 / d);
+	//		rampTime.advanceTimer();
 
-			return lfoOutputData;
-		}
-	};
+	//		return lfoOutputData;
+	//	}
+	//};
 
 
 	// --- always first!
@@ -78,7 +108,8 @@ const ModOutputData SynthLFO::renderModulatorOutput()
 	}
 
 	// --- QP output always follows location of current modulo; first set equal
-	modCounterQP = modCounter;
+
+	modCounterQP = modCounter;  ///this is the old code
 
 	// --- then, advance modulo by quadPhaseInc = 0.25 = 90 degrees, AND wrap if needed
 	advanceAndCheckWrapModulo(modCounterQP, 0.25);

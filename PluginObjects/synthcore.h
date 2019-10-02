@@ -25,6 +25,9 @@ enum modSource
 	kLFO1_Normal,
 	kLFO1_QuadPhase,
 
+	kLFO2_Normal,
+	kLFO2_QuadPhase,
+
 	// --- EGs here
 	kEG1_Normal,	// EG1 = amp EG
 	kEG1_Biased,
@@ -50,12 +53,15 @@ enum modDestination
 	// --- oscillator pitch (add more here)
 	kOsc1_fo,
 
+	kLFO1_fo, // lfo FM
+
 	// --- FILTER (add more here)
 	kFilter1_fc, // Fc
 
 	// --- DCA (add more here)
 	kDCA_EGMod, // EG Input
 	kDCA_AmpMod,// Amp Mod Input
+	kDCA_SampleHoldMod, //bipolar clamping mod input
 
 	// --- remain last, will always be the size of modulator array
 	kNumModDestinations
@@ -117,6 +123,7 @@ struct SynthVoiceParameters
 
 	// --- LFO oscillators
 	std::shared_ptr<SynthLFOParameters> lfo1Parameters = std::make_shared<SynthLFOParameters>();
+	std::shared_ptr<SynthLFOParameters> lfo2Parameters = std::make_shared<SynthLFOParameters>();
 
 	// --- EGs
 	std::shared_ptr<EGParameters> ampEGParameters = std::make_shared<EGParameters>();
@@ -292,10 +299,21 @@ protected:
 		modSourceData[kEG1_Normal] = &ampEGOutput.modulationOutputs[kEGNormalOutput];
 		modSourceData[kEG1_Biased] = &ampEGOutput.modulationOutputs[kEGBiasedOutput];
 
+		//LFO 2
+		modSourceData[kLFO2_Normal] = &lfo2Output.modulationOutputs[kLFONormalOutput];
+
 		// --- destinations
 		modDestinationData[kOsc1_fo] = &(osc1->getModulators()->modulationInputs[kBipolarMod]);
 		modDestinationData[kDCA_EGMod] = &(dca->getModulators()->modulationInputs[kEGMod]);
 		modDestinationData[kDCA_AmpMod] = &(dca->getModulators()->modulationInputs[kMaxDownAmpMod]);
+
+		//sample to the bipolar
+		modDestinationData[kDCA_SampleHoldMod] = &(dca->getModulators()->modulationInputs[kAuxBipolarMod_1]);
+
+
+		//LFO2
+		modDestinationData[kLFO1_fo] = &(lfo1->getModulators()->modulationInputs[kFrequencyMod]);
+
 	}
 
 	// --- arrays to hold source/destination
@@ -304,6 +322,7 @@ protected:
 
 	// --- mod source data: --- modulators ---
 	ModOutputData lfo1Output;
+	ModOutputData lfo2Output;
 	ModOutputData ampEGOutput;
 
 	// --- mod source data: --- filter ---
@@ -329,6 +348,7 @@ protected:
 
 	// --- LFOs
 	std::unique_ptr<SynthLFO> lfo1;
+	std::unique_ptr<SynthLFO> lfo2;
 
 	// --- EGs
 	std::unique_ptr<EnvelopeGenerator> ampEG;

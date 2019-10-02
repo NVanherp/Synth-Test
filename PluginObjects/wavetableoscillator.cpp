@@ -168,7 +168,7 @@ bool WaveTableBank::resetWaveTables(double sampleRate)
 uint32_t WaveTableBank::selectTable(int oscillatorWaveformIndex, uint32_t midiNoteNumber)
 {
 	// --- for testing
-	oscillatorWaveformIndex = 4; // for testing remove this.....later.....
+	oscillatorWaveformIndex = 0; // for testing remove this.....later.....
 
 	// --- tables are stored with oscillator waveform index
 	selectedWT = wavetables[oscillatorWaveformIndex];
@@ -282,6 +282,7 @@ bool WaveTableOsc::update(bool updateAllModRoutings)
 	
 	// --- calculate combined tuning offsets by simply adding values in semitones
 	double fmodInput = modulators->modulationInputs[kBipolarMod] * kOscBipolarModRangeSemitones;
+	//need to use this for the LFOs
 
 	// --- do the portamento
 	double glideMod = glideModulator.getNextGlideModSemitones();
@@ -295,6 +296,7 @@ bool WaveTableOsc::update(bool updateAllModRoutings)
 		(parameters->detuneSemitones) +							/* semitones */
 		(parameters->detuneCents / 100.0) +						/* cents/100 = semitones */
 		(parameters->unisonDetuneCents / 100.0);					/* cents/100 = semitones */
+	//need something like this in our update function
 
 	// --- lookup the pitch shift modifier (fraction)
 	//double pitchShift = pitchShiftTableLookup(currentPitchModSemitones);

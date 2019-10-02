@@ -27,6 +27,8 @@ SynthVoice::SynthVoice(const std::shared_ptr<MidiInputData> _midiInputData,
 	
 	lfo1.reset(new SynthLFO(midiInputData, parameters->lfo1Parameters));
 
+	lfo2.reset(new SynthLFO(midiInputData, parameters->lfo2Parameters));
+
 	ampEG.reset(new EnvelopeGenerator(midiInputData, parameters->ampEGParameters));
 
 	dca.reset(new DCA(midiInputData, parameters->dcaParameters));
@@ -63,6 +65,7 @@ bool SynthVoice::reset(double _sampleRate)
 	osc1->reset(_sampleRate);
 
 	lfo1->reset(_sampleRate);
+	lfo2->reset(_sampleRate);
 
 	ampEG->reset(_sampleRate);
 
@@ -74,6 +77,7 @@ bool SynthVoice::reset(double _sampleRate)
 
 	// --- clear modulator output arrays
 	lfo1Output.clear();
+	lfo2Output.clear();
 	ampEGOutput.clear();
 	
 	// --- filter EG goes here (add more)
@@ -136,6 +140,9 @@ const SynthRenderData SynthVoice::renderAudioOutput()
 	// --- update/render (add more here)
 	lfo1->update(updateAllModRoutings);
 	lfo1Output = lfo1->renderModulatorOutput();
+
+	lfo2->update(updateAllModRoutings);
+	lfo2Output = lfo2->renderModulatorOutput();
 	
 	// --- update/render (add more here)
 	ampEG->update(updateAllModRoutings);
@@ -200,6 +207,13 @@ const SynthRenderData SynthVoice::renderAudioOutput()
 	// --- summation for the simple core
 	synthOutputData.synthOutputs[0] = audioData.outputs[0];
 	synthOutputData.synthOutputs[1] = audioData.outputs[1];
+
+	///test the oscillators output
+
+	//synthOutputData.synthOutputs[0] =
+	//	lfo1Output.modulationOutputs[kLFONormalOutput];
+	//synthOutputData.synthOutputs[1] =
+	//	lfo2Output.modulationOutputs[kLFONormalOutput];
 
 	return synthOutputData;
 }
@@ -319,6 +333,12 @@ SynthEngine::SynthEngine()
 	//
 	// --- kEG1_Normal -> kDCA_EGMod
 	parameters.setMM_HardwiredRouting(kEG1_Normal, kDCA_EGMod);
+	parameters.setMM_HardwiredRouting(kLFO1_fo, kOsc1_fo);
+	parameters.setMM_HardwiredRouting(kLFO2_Normal, kLFO1_fo);
+
+	parameters.setMM_HardwiredRouting(kLFO1_Normal, kDCA_SampleHoldMod);
+	
+
 
 	// --- example of another hardwired routing
 	//parameters.setMM_HardwiredRouting(kLFO1_Normal, kOsc1_fo);

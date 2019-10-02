@@ -63,6 +63,7 @@ public:
 	// --- read a wavetable; this can vary considerably depending
 	//     on how you implement the wavetable itself; here I just
 	//     forward to the wavetable structure
+
 	inline virtual double readWaveTable(double readIndex)
 	{
 		return selectedWT->readWaveTable(readIndex);
