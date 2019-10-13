@@ -12,6 +12,7 @@
 // -----------------------------------------------------------------------------
 #include "plugincore.h"
 #include "plugindescription.h"
+#include "bankwaveviews.h"
 
 /**
 \brief PluginCore constructor is launching pad for object initialization
@@ -144,6 +145,18 @@ bool PluginCore::initPluginParameters()
 	piParam->setBoundVariable(&waveShapeY, boundVariableType::kDouble);
 	addPluginParameter(piParam);
 
+	// --- discrete control: Osc1 Wave
+	piParam = new PluginParameter(controlID::osc1_waveForm, "Osc1 Wave", "wave0,wave1,wave2,wave3,wave4,wave5,wave6,wave7,wave8,wave9,wave10,wave11,wave12,wave13,wave14,wave15,wave16,wave17,wave18,wave19,wave20,wave21,wave22,wave23,wave24,wave25,wave26,wave27,wave28,wave29,wave30,wave31", "wave0");
+	piParam->setBoundVariable(&osc1_waveForm, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Banks
+	piParam = new PluginParameter(controlID::osc1_BankIndex, "Banks", "Bank 0,Bank 1,Bank 2,Bank 3", "Bank 0");
+	piParam->setBoundVariable(&osc1_BankIndex, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
 	// --- Aux Attributes
 	AuxParameterAttribute auxAttribute;
 
@@ -202,6 +215,16 @@ bool PluginCore::initPluginParameters()
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
 	auxAttribute.setUintAttribute(2147483648);
 	setParamAuxAttribute(controlID::waveShapeY, auxAttribute);
+
+	// --- controlID::osc1_waveForm
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::osc1_waveForm, auxAttribute);
+
+	// --- controlID::osc1_BankIndex
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::osc1_BankIndex, auxAttribute);
 
 
 	// **--0xEDA5--**
@@ -285,6 +308,12 @@ void PluginCore::updateParameters()
 	engineParams.voiceParameters->lfo1Parameters->waveShapeX = waveShapeY;
 
 	//engineParams.voiceParameters->osc1Parameters->
+
+	engineParams.voiceParameters->osc1Parameters->oscillatorWaveformIndex = osc1_waveForm;
+
+	engineParams.voiceParameters->osc1Parameters->oscillatorBankIndex = osc1_BankIndex;
+
+
 
 	
 	
@@ -578,6 +607,8 @@ bool PluginCore::processMessage(MessageInfo& messageInfo)
 		// --- add customization appearance here
 	case PLUGINGUI_DIDOPEN:
 	{
+		if (bankAndWaveGroup_0)
+			bankAndWaveGroup_0->updateView();
 		return false;
 	}
 
@@ -601,6 +632,56 @@ bool PluginCore::processMessage(MessageInfo& messageInfo)
 	}
 
 	case PLUGINGUI_REGISTER_SUBCONTROLLER:
+	{
+
+		// --- decode name string
+
+		if (messageInfo.inMessageString.compare("BankWaveController_0") == 0)
+
+		{
+
+			// --- (1) get the custom view interface via incoming message data*
+			//         can use it for communication
+
+			if (bankAndWaveGroup_0 != static_cast<ICustomView*>(messageInfo.inMessageData))
+
+				bankAndWaveGroup_0 = static_cast<ICustomView*>(messageInfo.inMessageData);
+
+			if (!bankAndWaveGroup_0) return false;
+
+			// --- need to tell the subcontroller the bank names
+			VSTGUI::BankWaveMessage subcontrollerMessage;
+
+			subcontrollerMessage.message = VSTGUI::UPDATE_BANK_NAMES;
+
+			subcontrollerMessage.bankNames = synthEngine.getBankNames(0, 0); // voice, voice-oscillator 
+
+			bankAndWaveGroup_0->sendMessage(&subcontrollerMessage);
+
+
+			// --- now add the wave names for each bank
+
+			subcontrollerMessage.message = VSTGUI::ADD_BANK_WAVENAMES;
+
+
+			// --- bank 0
+			subcontrollerMessage.bankIndex = 0;
+
+			subcontrollerMessage.waveformNames = synthEngine.getOscWaveformNames(0, 0, 0); // voice, voice-oscillator, bank 
+
+			bankAndWaveGroup_0->sendMessage(&subcontrollerMessage);
+
+			// --- bank 1
+			subcontrollerMessage.bankIndex = 1;
+
+			subcontrollerMessage.waveformNames = synthEngine.getOscWaveformNames(0, 0, 1); // voice,  voice-oscillator, bank 
+
+			bankAndWaveGroup_0->sendMessage(&subcontrollerMessage);
+
+			// --- registered!
+			return true;
+		}
+	}
 	case PLUGINGUI_QUERY_HASUSERCUSTOM:
 	case PLUGINGUI_USER_CUSTOMOPEN:
 	case PLUGINGUI_USER_CUSTOMCLOSE:
@@ -683,7 +764,9 @@ bool PluginCore::initPluginPresets()
 	setPresetParameter(preset->presetParameters, controlID::lfo1RampTime_mSec, 0.000000);
 	setPresetParameter(preset->presetParameters, controlID::lfo2Frequency, 0.500000);
 	setPresetParameter(preset->presetParameters, controlID::waveShapeX, 0.500000);
-	setPresetParameter(preset->presetParameters, controlID::waveShapeY, 0.000000);
+	setPresetParameter(preset->presetParameters, controlID::waveShapeY, 0.500000);
+	setPresetParameter(preset->presetParameters, controlID::osc1_waveForm, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::osc1_BankIndex, -0.000000);
 	addPreset(preset);
 
 

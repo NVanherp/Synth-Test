@@ -176,6 +176,27 @@
     <ClInclude Include="..\PluginObjects\analog_square_1.h">
       <Filter>PluginObjects</Filter>
     </ClInclude>
+    <ClInclude Include="..\PluginObjects\wavetables\AKFW Test.h">
+      <Filter>PluginObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginObjects\wavetablebank.h">
+      <Filter>PluginObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginObjects\wavetabledata.h">
+      <Filter>PluginObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginObjects\wavetable.h">
+      <Filter>PluginObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginObjects\wavetables\Lead.h">
+      <Filter>PluginObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginObjects\wavetables\Rand.h">
+      <Filter>PluginObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CustomControls\bankwaveviews.h">
+      <Filter>CustomControls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Resources\PluginGUI.uidesc">

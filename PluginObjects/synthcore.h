@@ -236,6 +236,8 @@ public:
 	//     bankIndex is variable; can have as many banks as you want (for now)
 	std::vector<std::string> getWaveformNames(uint32_t bankIndex, uint32_t oscIndex);
 
+	std::vector<std::string> getBankNames(uint32_t oscIndex);
+
 	// --- local handlers for stealing
 	bool doNoteOn(midiEvent& event);
 	bool doNoteOff(midiEvent& event);
@@ -553,6 +555,8 @@ public:
 	// --- helpers for populating oscillator waveform GUI controls
 	//     for synths, these are usually the only dynamic items like this
 	std::vector<std::string> getOscWaveformNames(uint32_t voiceIndex, uint32_t bankIndex, uint32_t oscillatorIndex);
+	// --- get the bank names
+	std::vector<std::string> getBankNames(uint32_t voiceIndex, uint32_t oscillatorIndex);
 
 protected:
 	// --- our outputs, same number as synth voice!

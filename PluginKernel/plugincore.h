@@ -31,7 +31,9 @@ enum controlID {
 	lfo1RampTime_mSec = 54,
 	lfo2Frequency = 30,
 	waveShapeX = 32,
-	waveShapeY = 33
+	waveShapeY = 33,
+	osc1_waveForm = 55,
+	osc1_BankIndex = 56
 };
 
 	// **--0x0F1F--**
@@ -118,6 +120,8 @@ public:
 	SynthEngine synthEngine;
 	void updateParameters();
 
+	ICustomView* bankAndWaveGroup_0 = nullptr;
+
 	// --- END USER VARIABLES AND FUNCTIONS -------------------------------------- //
 
 private:
@@ -140,6 +144,12 @@ private:
 
 	int lfo1Mode = 0;
 	enum class lfo1ModeEnum { Sync,One_Shot,Free_Run };	// to compare: if(compareEnumToInt(lfo1ModeEnum::Sync, lfo1Mode)) etc... 
+
+	int osc1_waveForm = 0;
+	enum class osc1_waveFormEnum { wave0,wave1,wave2,wave3,wave4,wave5,wave6,wave7,wave8,wave9,wave10,wave11,wave12,wave13,wave14,wave15,wave16,wave17,wave18,wave19,wave20,wave21,wave22,wave23,wave24,wave25,wave26,wave27,wave28,wave29,wave30,wave31 };	// to compare: if(compareEnumToInt(osc1_waveFormEnum::wave0, osc1_waveForm)) etc... 
+
+	int osc1_BankIndex = 0;
+	enum class osc1_BankIndexEnum { Bank_0,Bank_1,Bank_2,Bank_3 };	// to compare: if(compareEnumToInt(osc1_BankIndexEnum::Bank_0, osc1_BankIndex)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables

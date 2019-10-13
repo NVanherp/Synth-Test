@@ -221,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CustomControls\atomicops.h" />
+    <ClInclude Include="..\CustomControls\bankwaveviews.h" />
     <ClInclude Include="..\CustomControls\customcontrols.h" />
     <ClInclude Include="..\CustomControls\readerwriterqueue.h" />
     <ClInclude Include="..\CustomControls\customviews.h" />
@@ -243,7 +244,13 @@
     <ClInclude Include="..\PluginObjects\trace.h" />
     <ClInclude Include="..\PluginObjects\vafilters.h" />
     <ClInclude Include="..\PluginObjects\wavedata.h" />
+    <ClInclude Include="..\PluginObjects\wavetable.h" />
+    <ClInclude Include="..\PluginObjects\wavetablebank.h" />
+    <ClInclude Include="..\PluginObjects\wavetabledata.h" />
     <ClInclude Include="..\PluginObjects\wavetableoscillator.h" />
+    <ClInclude Include="..\PluginObjects\wavetables\AKFW Test.h" />
+    <ClInclude Include="..\PluginObjects\wavetables\Lead.h" />
+    <ClInclude Include="..\PluginObjects\wavetables\Rand.h" />
     <ClInclude Include="..\PluginObjects\window_eg.h" />
     <ClInclude Include="..\RAFX2 Source\RackAFXDLL.h" />
     <ClInclude Include="..\RAFX2 Source\Rafx2Plugin.h" />

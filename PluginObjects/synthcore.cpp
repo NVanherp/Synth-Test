@@ -40,9 +40,43 @@ SynthVoice::~SynthVoice()
 
 }
 
-std::vector<std::string> SynthVoice::getWaveformNames(uint32_t bankIndex, uint32_t oscIndex)
+std::vector<std::string> SynthVoice::getWaveformNames(uint32_t oscIndex, uint32_t bankIndex)
+
 {
-	return osc1->getWaveformNames(bankIndex);
+
+	std::vector<std::string> emptyVector;
+
+
+
+	if (oscIndex == 0)
+
+		return osc1->getWaveformNames(bankIndex);
+
+
+
+	emptyVector.clear();
+
+	return emptyVector;
+
+}
+
+std::vector<std::string> SynthVoice::getBankNames(uint32_t oscIndex)
+
+{
+
+	std::vector<std::string> emptyVector;
+
+
+
+	if (oscIndex == 0)
+
+		return osc1->getBankNames();
+
+
+
+	emptyVector.clear();
+
+	return emptyVector;
 
 }
 
@@ -159,6 +193,7 @@ const SynthRenderData SynthVoice::renderAudioOutput()
 	osc1Output = osc1->renderAudioOutput();
 
 	// --- blend oscillator outputs
+	//add the outputs here with 0.25 scaling obviously
 	double oscOut = osc1Output.outputs[0]; // +... add more oscillator outputs here
 
 	// --- do the filtering
@@ -333,10 +368,10 @@ SynthEngine::SynthEngine()
 	//
 	// --- kEG1_Normal -> kDCA_EGMod
 	parameters.setMM_HardwiredRouting(kEG1_Normal, kDCA_EGMod);
-	parameters.setMM_HardwiredRouting(kLFO1_fo, kOsc1_fo);
-	parameters.setMM_HardwiredRouting(kLFO2_Normal, kLFO1_fo);
+	//parameters.setMM_HardwiredRouting(kLFO1_fo, kOsc1_fo);
+	//parameters.setMM_HardwiredRouting(kLFO2_Normal, kLFO1_fo);
 
-	parameters.setMM_HardwiredRouting(kLFO1_Normal, kDCA_SampleHoldMod);
+	//parameters.setMM_HardwiredRouting(kLFO1_Normal, kDCA_SampleHoldMod);
 	
 
 
@@ -406,14 +441,28 @@ bool SynthEngine::initialize(PluginInfo pluginInfo)
 	return true;
 }
 
-std::vector<std::string> SynthEngine::getOscWaveformNames(uint32_t voiceIndex, uint32_t bankIndex, uint32_t oscillatorIndex)
+std::vector<std::string> SynthEngine::getOscWaveformNames(uint32_t voiceIndex, uint32_t oscillatorIndex, uint32_t bankIndex)
 {
 	std::vector<std::string> emptyVector;
-	//  voiceIndex is usually just 0, unless you have mixed-mode voices
+
 	if (voiceIndex >= MAX_VOICES)
+
 		return emptyVector;
 
-	return synthVoices[voiceIndex]->getWaveformNames(bankIndex, oscillatorIndex);
+	return synthVoices[voiceIndex]->getWaveformNames(oscillatorIndex, bankIndex);
+}
+
+// --- get the bank names
+
+std::vector<std::string> SynthEngine::getBankNames(uint32_t voiceIndex, uint32_t oscillatorIndex)
+{
+	std::vector<std::string> emptyVector;
+
+	if (voiceIndex >= MAX_VOICES)
+
+		return emptyVector;
+
+	return synthVoices[voiceIndex]->getBankNames(oscillatorIndex);
 }
 
 const SynthRenderData SynthEngine::renderAudioOutput()

@@ -79,13 +79,13 @@ enum {
 
 */
 
-inline double msecToSamples(double sampleRate, double timeMSec)
-
-{
-
-	return sampleRate * (timeMSec / 1000.0);;
-
-}
+//inline double msecToSamples(double sampleRate, double timeMSec)
+//
+//{
+//
+//	return sampleRate * (timeMSec / 1000.0);;
+//
+//}
 
 struct SynthLFOParameters
 {

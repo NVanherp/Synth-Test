@@ -22,10 +22,13 @@ bool SynthLFO::update(bool updateAllModRoutings)
 	// --- End Priority modulators
 	if (!updateAllModRoutings)
 		return true;
+
+
 	//line for final LFO freq (GUI + modulated)
 
 	double d = msecToSamples(sampleRate, parameters->ramp); //establishing the timer
 	rampTime.setTargetValueInSamples(d);
+
 		//implementing the lfo output ramp
 	if (parameters->ramp > 0.0) {
 
@@ -85,6 +88,7 @@ const ModOutputData SynthLFO::renderModulatorOutput()
 			return lfoOutputData;
 		}
 	}
+
 	////implementing the lfo output ramp
 	//else if (parameters->ramp > 0.0) {
 	//	double d = msecToSamples(sampleRate, parameters->ramp); //establishing the timer
@@ -189,6 +193,7 @@ const ModOutputData SynthLFO::renderModulatorOutput()
 		lfoOutputData.modulationOutputs[kLFONormalOutput] = randomSHValue;
 		lfoOutputData.modulationOutputs[kLFOQuadPhaseOutput] = randomSHValue;
 	}
+
 
 
 	// --- scale by amplitude

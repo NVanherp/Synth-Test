@@ -390,6 +390,10 @@ struct MidiOutputData
 \ingroup SynthDefs
 \brief convert milliseconds to samples
 */
+inline double msecToSamples(double sampleRate, double timeMSec)
+{
+	return sampleRate*(timeMSec / 1000.0);;
+}
 
 
 /**
@@ -901,6 +905,33 @@ protected:
 	}
 };
 
+/**
+\struct SlewLimiter
+\ingroup SynthStructures
+\brief A structure the implements a simple 1-pole LPF to use as a slew-limiter
+*/
+struct SlewLimiter
+{
+public:
+	SlewLimiter() {}
+
+	// --- slewing functions
+	void reset() { z1 = 0; }		///< reset the counter
+
+									// --- slew value is:  0 <= slewvalue <= 0.9999
+	void setSlewValue(double _g) { g = _g; }		///< reset the counter
+	double doSlewLimiter(double input)
+	{
+		double output = input*(1.0 - g) + g*z1;
+		z1 = output;
+		return output;
+	}
+
+protected:
+	double g = 0;
+	double z1 = 0.0;
+};
+
 
 /**
 \struct XHoldFader
@@ -1124,7 +1155,7 @@ public:
 //     the waveforms can be from ANY kind of synthesis
 //     including morphing types, so there may be far more
 //     tables than just 32, or 32x128 = 4096
-const uint32_t MAX_NUM_OSC_WAVES = 32;
+// const uint32_t MAX_NUM_OSC_WAVES = 32;
 
 // --- map double on to a UINT 64
 inline uint64_t doubleToUint64(double d)
@@ -1157,7 +1188,7 @@ public:
 	//     Should add Lagrange interpolation (maybe as class project?)
 	virtual double readWaveTable(double readIndex) = 0;
 
-	// --- get the number of waves for this datasource, must be <= MAX_NUM_OSC_WAVES = 32
+	// --- get the number of waves for this datasource
 	virtual uint32_t getNumWaveforms() = 0;
 
 	// --- returns the names of the waveforms, which are identical to the indexes of waveform selection on the GUI
@@ -1181,12 +1212,12 @@ public:
 	//     get a safe interface pointer to a bank
 	virtual IWaveBank* getInterface(uint32_t waveBankIndex) = 0;
 
-	// --- get the number of waves for this datasource, must be <= MAX_NUM_OSC_WAVES = 32
+	// --- get the number of waves for this datasource
 	virtual uint32_t getNumWaveBanks() = 0;
 
 	// --- returns the names of the waveforms, which are identical to the indexes of waveform selection on the GUI
 	//     If there is no waveform, returns "" for that
-	virtual std::vector<std::string> getWaveBankNames() = 0;
+	virtual std::vector<std::string> getWaveBankNames(uint32_t bankSet = 0) = 0;
 };
 
 
@@ -1256,13 +1287,19 @@ class ISynthModulator
 	virtual const ModOutputData renderModulatorOutput() = 0;
 };
 
+// --- **7**
 class ISynthOscillator
 {
 	// --- reset()
 	//     Sample rate may or may not be required, but usually is
 	virtual bool reset(double _sampleRate) = 0;
 	virtual bool update(bool updateAllModRoutings = true) = 0;
+
+	// --- banks
 	virtual std::vector<std::string> getWaveformNames(uint32_t bankIndex) = 0;
+	virtual std::vector<std::string> getBankNames() = 0;
+	virtual void setBankSet(uint32_t _bankSet) { }
+	virtual uint32_t getBankSet() { return 0; }
 
 	// --- note event handlers
 	virtual bool doNoteOn(double midiPitch, uint32_t midiNoteNumber, uint32_t midiNoteVelocity) = 0;
