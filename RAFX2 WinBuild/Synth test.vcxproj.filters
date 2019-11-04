@@ -87,6 +87,9 @@
     <ClCompile Include="..\PluginObjects\window_eg.cpp">
       <Filter>PluginObjects</Filter>
     </ClCompile>
+    <ClCompile Include="..\PluginObjects\rotor.cpp">
+      <Filter>PluginObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\RAFX2 Source\RackAFXDLL.h">
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="..\CustomControls\bankwaveviews.h">
       <Filter>CustomControls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PluginObjects\rotor.h">
+      <Filter>PluginObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

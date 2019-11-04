@@ -1174,6 +1174,18 @@ inline double uint64ToDouble(uint64_t u)
 }
 
 // --- for wave table data sources so they can be shared
+class IWaveTable
+{
+public:
+	// --- reset/regenerate wave tables
+	virtual void selectTable(uint32_t midiNoteNumber) = 0;
+
+	virtual double readWaveTable(double readIndex) = 0;
+
+	virtual uint32_t getWaveTableLength() = 0;
+};
+
+// --- for wave table data sources so they can be shared
 class IWaveBank
 {
 public:
@@ -1181,12 +1193,12 @@ public:
 	virtual bool resetWaveTables(double sampleRate) = 0;
 
 	// --- select table to read based on MIDI Note number of pitch modulated oscillator
-	virtual uint32_t selectTable(int oscillatorWaveformIndex, uint32_t midiNoteNumber) = 0;
+	virtual IWaveTable* selectTable(int oscillatorWaveformIndex, uint32_t midiNoteNumber, uint32_t& tableLen) = 0;
 
 	// --- read the selected wavetable and return a double value
 	//     linear interpolation is engaged by default
 	//     Should add Lagrange interpolation (maybe as class project?)
-	virtual double readWaveTable(double readIndex) = 0;
+	virtual double readWaveTable(IWaveTable* selectedWT, double readIndex) = 0;
 
 	// --- get the number of waves for this datasource
 	virtual uint32_t getNumWaveforms() = 0;
@@ -1200,6 +1212,8 @@ public:
 	virtual void setWaveBankName(std::string _bankName) = 0;
 
 };
+
+
 
 
 // --- stores N sets of IWaveBanks 

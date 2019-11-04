@@ -34,6 +34,9 @@ enum modSource
 
 	// --- oscillators here
 	kOsc1_Normal, // osc 1 output
+	kOsc2_Normal, // osc 1 output
+	kOsc3_Normal, // osc 1 output
+	kOsc4_Normal, // osc 1 output
 
 	// --- other modulators (e.g. filter output) here
 
@@ -94,10 +97,15 @@ struct SynthVoiceParameters
 		voiceUnisonDetune_Cents = params.voiceUnisonDetune_Cents;
 
 		osc1Parameters = params.osc1Parameters;
+		osc2Parameters = params.osc2Parameters;
+		osc3Parameters = params.osc3Parameters;
+		osc4Parameters = params.osc4Parameters;
 		dcaParameters = params.dcaParameters;
 
 		lfo1Parameters = params.lfo1Parameters;
 		ampEGParameters = params.ampEGParameters;
+
+		vectorJSData = params.vectorJSData;
 
 		return *this;
 	}
@@ -120,6 +128,9 @@ struct SynthVoiceParameters
 	// --- GUI CONTROL INTERFACE -------------------------------- //
 	// --- pitched oscillators
 	std::shared_ptr<SynthOscParameters> osc1Parameters = std::make_shared<SynthOscParameters>();
+	std::shared_ptr<SynthOscParameters> osc2Parameters = std::make_shared<SynthOscParameters>();
+	std::shared_ptr<SynthOscParameters> osc3Parameters = std::make_shared<SynthOscParameters>();
+	std::shared_ptr<SynthOscParameters> osc4Parameters = std::make_shared<SynthOscParameters>();
 
 	// --- LFO oscillators
 	std::shared_ptr<SynthLFOParameters> lfo1Parameters = std::make_shared<SynthLFOParameters>();
@@ -130,6 +141,9 @@ struct SynthVoiceParameters
 
 	// --- DCA
 	std::shared_ptr<DCAParameters> dcaParameters = std::make_shared<DCAParameters>();
+
+	//vector synthesis
+	VectorJoystickData vectorJSData;
 };
 
 struct ModSource
@@ -332,6 +346,9 @@ protected:
 
 	// --- mod source data: --- oscillators ---
 	OscillatorOutputData osc1Output;
+	OscillatorOutputData osc2Output;
+	OscillatorOutputData osc3Output;
+	OscillatorOutputData osc4Output;
 	// --------------------------------------------------
 	
 	// --- per-voice stuff
@@ -344,6 +361,9 @@ protected:
 
 	// --- smart pointers to the oscillator objects
 	std::unique_ptr<SynthOsc> osc1;
+	std::unique_ptr<SynthOsc> osc2;
+	std::unique_ptr<SynthOsc> osc3;
+	std::unique_ptr<SynthOsc> osc4;
 
 	// --- filters:
 	// add here....

@@ -17,16 +17,21 @@ SynthOsc::SynthOsc(const std::shared_ptr<MidiInputData> _midiInputData,
 
 	// --- create sub-components
 	wavetableOscillator.reset(new WaveTableOsc(midiInputData, parameters, waveTableData));
+	wavetableOscillator_2.reset(new WaveTableOsc(midiInputData, parameters, waveTableData));
 
 	// --- **7**
 	wavetableOscillator->setBankSet(BANK_SET_0);
+	wavetableOscillator_2->setBankSet(BANK_SET_0);
 }
 
 // --- **7**
 void SynthOsc::setBankSet(uint32_t _bankSet)
 {
 	wavetableOscillator->setBankSet(_bankSet);
+	wavetableOscillator_2->setBankSet(_bankSet);
 }
+
+
 uint32_t SynthOsc::getBankSet()
 {
 	return wavetableOscillator->getBankSet();

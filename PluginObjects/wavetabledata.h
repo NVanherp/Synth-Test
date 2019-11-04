@@ -6,6 +6,8 @@
 
 // --- wavetable objects and structs
 #include "wavetablebank.h"
+#include "wavetables/Lead.h"
+#include "wavetables/Rand.h"
 
 // --- stores MAX_BANKS_PER_PLUGIN sets of IWaveBanks (128)
 //     NOTE: this is the ONE AND ONLY wavetable datasource for the entire synth

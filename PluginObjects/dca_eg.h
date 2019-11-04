@@ -139,7 +139,7 @@ enum {
 // --- strongly typed enum for trivial oscillator type & mode
 enum class egTCMode { kAnalog, kDigital };
 enum class egState { kOff, kDelay, kAttack, kDecay, kSustain, kRelease, kShutdown, kHoldOn, kHoldOff };
-enum class egType { kADSR, kAHDSR, kAHR };
+enum class egType { kADSR, kAHDSR, kAHR , kAHR_RT};
 
 /**
 \struct EGParameters
@@ -171,6 +171,7 @@ struct EGParameters
 		holdTime_mSec = params.holdTime_mSec;
 		offTime_mSec = params.offTime_mSec;
 		delayTime_mSec = params.delayTime_mSec;
+		autoRetrig = params.autoRetrig;
 
 		return *this;
 	}
@@ -191,6 +192,8 @@ struct EGParameters
 	double holdTime_mSec = 0.0;
 	double offTime_mSec = 0.0;
 	double delayTime_mSec = 0.0;
+	bool autoRetrig = false;
+	
 };
 
 /**

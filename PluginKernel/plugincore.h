@@ -33,7 +33,20 @@ enum controlID {
 	waveShapeX = 32,
 	waveShapeY = 33,
 	osc1_waveForm = 55,
-	osc1_BankIndex = 56
+	osc1_BankIndex = 56,
+	osc2_waveForm = 65,
+	osc2_BankIndex = 66,
+	osc3_waveForm = 57,
+	osc3_BankIndex = 67,
+	osc4_waveForm = 58,
+	osc4_BankIndex = 68,
+	EG1_attackTime_mSec = 72,
+	EG1_decayTime_mSec = 74,
+	EG1_sustainLevel = 75,
+	EG1_releaseTime_mSec = 76,
+	EG1_holdTime_mSec = 73,
+	EG1_delayTime_mSec = 77,
+	EG1_mode = 78
 };
 
 	// **--0x0F1F--**
@@ -137,6 +150,12 @@ private:
 	double lfo2Frequency = 0.0;
 	double waveShapeX = 0.0;
 	double waveShapeY = 0.0;
+	double EG1_attackTime_mSec = 0.0;
+	double EG1_decayTime_mSec = 0.0;
+	double EG1_sustainLevel = 0.0;
+	double EG1_releaseTime_mSec = 0.0;
+	double EG1_holdTime_mSec = 0.0;
+	double EG1_delayTime_mSec = 0.0;
 
 	// --- Discrete Plugin Variables 
 	int lfo1Waveform = 0;
@@ -150,6 +169,27 @@ private:
 
 	int osc1_BankIndex = 0;
 	enum class osc1_BankIndexEnum { Bank_0,Bank_1,Bank_2,Bank_3 };	// to compare: if(compareEnumToInt(osc1_BankIndexEnum::Bank_0, osc1_BankIndex)) etc... 
+
+	int osc2_waveForm = 0;
+	enum class osc2_waveFormEnum { wave0,wave1,wave2,wave3,wave4,wave5,wave6,wave7,wave8,wave9,wave10,wave11,wave12,wave13,wave14,wave15,wave16,wave17,wave18,wave19,wave20,wave21,wave22,wave23,wave24,wave25,wave26,wave27,wave28,wave29,wave30,wave31 };	// to compare: if(compareEnumToInt(osc2_waveFormEnum::wave0, osc2_waveForm)) etc... 
+
+	int osc2_BankIndex = 0;
+	enum class osc2_BankIndexEnum { bank0,bank1,bank2,bank3 };	// to compare: if(compareEnumToInt(osc2_BankIndexEnum::bank0, osc2_BankIndex)) etc... 
+
+	int osc3_waveForm = 0;
+	enum class osc3_waveFormEnum { wave0,wave1,wave2,wave3,wave4,wave5,wave6,wave7,wave8,wave9,wave10,wave11,wave12,wave13,wave14,wave15,wave16,wave17,wave18,wave19,wave20,wave21,wave22,wave23,wave24,wave25,wave26,wave27,wave28,wave29,wave30,wave31 };	// to compare: if(compareEnumToInt(osc3_waveFormEnum::wave0, osc3_waveForm)) etc... 
+
+	int osc3_BankIndex = 0;
+	enum class osc3_BankIndexEnum { bank0,bank1,bank2,bank3 };	// to compare: if(compareEnumToInt(osc3_BankIndexEnum::bank0, osc3_BankIndex)) etc... 
+
+	int osc4_waveForm = 0;
+	enum class osc4_waveFormEnum { wave0,wave1,wave2,wave3,wave4,wave5,wave6,wave7,wave8,wave9,wave10,wave11,wave12,wave13,wave14,wave15,wave16,wave17,wave18,wave19,wave20,wave21,wave22,wave23,wave24,wave25,wave26,wave27,wave28,wave29,wave30,wave31 };	// to compare: if(compareEnumToInt(osc4_waveFormEnum::wave0, osc4_waveForm)) etc... 
+
+	int osc4_BankIndex = 0;
+	enum class osc4_BankIndexEnum { bank0,bank1,bank2,bank3 };	// to compare: if(compareEnumToInt(osc4_BankIndexEnum::bank0, osc4_BankIndex)) etc... 
+
+	int EG1_mode = 0;
+	enum class EG1_modeEnum { ADSR,AHDSR,AHR,AHR_RT };	// to compare: if(compareEnumToInt(EG1_modeEnum::ADSR, EG1_mode)) etc... 
 
 	// **--0x1A7F--**
     // --- end member variables

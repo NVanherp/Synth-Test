@@ -209,6 +209,7 @@ bool EnvelopeGenerator::update(bool updateAllModRoutings)
 	if (releaseTime_mSec != parameters->releaseTime_mSec)
 		calculateReleaseTime(parameters->releaseTime_mSec);
 
+
 	// --- update MIDI stuff
 	setSustainOverride(midiInputData->ccMIDIData[SUSTAIN_PEDAL] > 63);
 
@@ -346,12 +347,13 @@ const ModOutputData EnvelopeGenerator::renderModulatorOutput()
 			if (envelopeOutput >= 1.0 || attackTime_mSec <= 0.0)
 			{
 				envelopeOutput = 1.0;
-				if(parameters->egContourType == egType::kADSR)
-					state = egState::kDecay;	// go to kDecay
-				else if (parameters->egContourType == egType::kAHR)
-					state = egState::kHoldOn;	// go to kHoldOn
+				//if(parameters->egContourType == egType::kADSR)
+				//	state = egState::kDecay;	// go to kDecay
+
+				if (parameters->egContourType == egType::kADSR)
+					state = egState::kDecay;	// go to kHoldOn
 				else
-					state = egState::kDecay;	// go to kDecay
+					state = egState::kHoldOn;	// go to kDecay
 
 				break;
 			}
@@ -378,7 +380,7 @@ const ModOutputData EnvelopeGenerator::renderModulatorOutput()
 			// --- check expired
 			if (holdTime_mSec == 0.0 || holdTimer.timerExpired())
 			{
-				if (parameters->egContourType == egType::kAHR)
+				if (parameters->egContourType == egType::kAHR || parameters->egContourType == egType::kAHR_RT)
 					state = egState::kRelease;	// go to kAR_Release
 				else
 					state = egState::kDecay;	// go to next state
@@ -416,14 +418,21 @@ const ModOutputData EnvelopeGenerator::renderModulatorOutput()
 			{
 				envelopeOutput = 0.0;
 
-				if(offTime_mSec <= 0.0)
+				if (offTime_mSec <= 0.0)
 					state = egState::kOff;			// go to OFF state
+				else if (parameters->egContourType == egType::kAHR_RT) {
+					state = egState::kDelay;
+					delayTimer.resetTimer();
+				}
+
 				else
 					state = egState::kHoldOff;		// go to OFF state
 
 				break;
 			}
 			break;
+
+
 		}
 		case egState::kShutdown:
 		{

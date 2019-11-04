@@ -39,6 +39,7 @@ public:
 	virtual bool setGlideModulation(uint32_t _startMIDINote, uint32_t _endMIDINote, double glideTime_mSec)
 	{
 		wavetableOscillator->setGlideModulation(_startMIDINote, _endMIDINote, glideTime_mSec);
+		wavetableOscillator_2->setGlideModulation(_startMIDINote, _endMIDINote, glideTime_mSec);
 
 		return true;
 	}
@@ -74,6 +75,7 @@ protected:
 
 	// --- smart pointers to the oscillator object
 	std::unique_ptr<WaveTableOsc> wavetableOscillator = nullptr;
+	std::unique_ptr<WaveTableOsc> wavetableOscillator_2 = nullptr;
 };
 
 

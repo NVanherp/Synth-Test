@@ -157,6 +157,90 @@ bool PluginCore::initPluginParameters()
 	piParam->setIsDiscreteSwitch(true);
 	addPluginParameter(piParam);
 
+	// --- discrete control: Osc2
+	piParam = new PluginParameter(controlID::osc2_waveForm, "Osc2", "wave0,wave1,wave2,wave3,wave4,wave5,wave6,wave7,wave8,wave9,wave10,wave11,wave12,wave13,wave14,wave15,wave16,wave17,wave18,wave19,wave20,wave21,wave22,wave23,wave24,wave25,wave26,wave27,wave28,wave29,wave30,wave31", "wave0");
+	piParam->setBoundVariable(&osc2_waveForm, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Osc2 Bank
+	piParam = new PluginParameter(controlID::osc2_BankIndex, "Osc2 Bank", "bank0,bank1,bank2,bank3", "bank0");
+	piParam->setBoundVariable(&osc2_BankIndex, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Osc3 Wave
+	piParam = new PluginParameter(controlID::osc3_waveForm, "Osc3 Wave", "wave0,wave1,wave2,wave3,wave4,wave5,wave6,wave7,wave8,wave9,wave10,wave11,wave12,wave13,wave14,wave15,wave16,wave17,wave18,wave19,wave20,wave21,wave22,wave23,wave24,wave25,wave26,wave27,wave28,wave29,wave30,wave31", "wave0");
+	piParam->setBoundVariable(&osc3_waveForm, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Osc3 Bank
+	piParam = new PluginParameter(controlID::osc3_BankIndex, "Osc3 Bank", "bank0,bank1,bank2,bank3", "bank0");
+	piParam->setBoundVariable(&osc3_BankIndex, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Osc4 Wave
+	piParam = new PluginParameter(controlID::osc4_waveForm, "Osc4 Wave", "wave0,wave1,wave2,wave3,wave4,wave5,wave6,wave7,wave8,wave9,wave10,wave11,wave12,wave13,wave14,wave15,wave16,wave17,wave18,wave19,wave20,wave21,wave22,wave23,wave24,wave25,wave26,wave27,wave28,wave29,wave30,wave31", "wave0");
+	piParam->setBoundVariable(&osc4_waveForm, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- discrete control: Osc4 Bank
+	piParam = new PluginParameter(controlID::osc4_BankIndex, "Osc4 Bank", "bank0,bank1,bank2,bank3", "bank0");
+	piParam->setBoundVariable(&osc4_BankIndex, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
+	// --- continuous control: EG1 Attack
+	piParam = new PluginParameter(controlID::EG1_attackTime_mSec, "EG1 Attack", "mSec", controlVariableType::kDouble, 0.000000, 2000.000000, 1.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(false);
+	piParam->setSmoothingTimeMsec(100.00);
+	piParam->setBoundVariable(&EG1_attackTime_mSec, boundVariableType::kDouble);
+	addPluginParameter(piParam);
+
+	// --- continuous control: EG1 Decay
+	piParam = new PluginParameter(controlID::EG1_decayTime_mSec, "EG1 Decay", "mSec", controlVariableType::kDouble, 0.000000, 5000.000000, 100.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(false);
+	piParam->setSmoothingTimeMsec(100.00);
+	piParam->setBoundVariable(&EG1_decayTime_mSec, boundVariableType::kDouble);
+	addPluginParameter(piParam);
+
+	// --- continuous control: EG1 Sustain
+	piParam = new PluginParameter(controlID::EG1_sustainLevel, "EG1 Sustain", "", controlVariableType::kDouble, 0.000000, 1.000000, 0.707000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(false);
+	piParam->setSmoothingTimeMsec(100.00);
+	piParam->setBoundVariable(&EG1_sustainLevel, boundVariableType::kDouble);
+	addPluginParameter(piParam);
+
+	// --- continuous control: EG1 Release
+	piParam = new PluginParameter(controlID::EG1_releaseTime_mSec, "EG1 Release", "mSec", controlVariableType::kDouble, 0.000000, 10000.000000, 1000.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(false);
+	piParam->setSmoothingTimeMsec(100.00);
+	piParam->setBoundVariable(&EG1_releaseTime_mSec, boundVariableType::kDouble);
+	addPluginParameter(piParam);
+
+	// --- continuous control: EG1 Hold
+	piParam = new PluginParameter(controlID::EG1_holdTime_mSec, "EG1 Hold", "mSec", controlVariableType::kDouble, 0.000000, 40000.000000, 0.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(false);
+	piParam->setSmoothingTimeMsec(100.00);
+	piParam->setBoundVariable(&EG1_holdTime_mSec, boundVariableType::kDouble);
+	addPluginParameter(piParam);
+
+	// --- continuous control: EG1 Delay
+	piParam = new PluginParameter(controlID::EG1_delayTime_mSec, "EG1 Delay", "mSec", controlVariableType::kDouble, 0.000000, 4000.000000, 0.000000, taper::kLinearTaper);
+	piParam->setParameterSmoothing(false);
+	piParam->setSmoothingTimeMsec(100.00);
+	piParam->setBoundVariable(&EG1_delayTime_mSec, boundVariableType::kDouble);
+	addPluginParameter(piParam);
+
+	// --- discrete control: EG1 Mode
+	piParam = new PluginParameter(controlID::EG1_mode, "EG1 Mode", "ADSR,AHDSR,AHR,AHR RT", "ADSR");
+	piParam->setBoundVariable(&EG1_mode, boundVariableType::kInt);
+	piParam->setIsDiscreteSwitch(true);
+	addPluginParameter(piParam);
+
 	// --- Aux Attributes
 	AuxParameterAttribute auxAttribute;
 
@@ -225,6 +309,71 @@ bool PluginCore::initPluginParameters()
 	auxAttribute.reset(auxGUIIdentifier::guiControlData);
 	auxAttribute.setUintAttribute(805306368);
 	setParamAuxAttribute(controlID::osc1_BankIndex, auxAttribute);
+
+	// --- controlID::osc2_waveForm
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::osc2_waveForm, auxAttribute);
+
+	// --- controlID::osc2_BankIndex
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::osc2_BankIndex, auxAttribute);
+
+	// --- controlID::osc3_waveForm
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::osc3_waveForm, auxAttribute);
+
+	// --- controlID::osc3_BankIndex
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::osc3_BankIndex, auxAttribute);
+
+	// --- controlID::osc4_waveForm
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::osc4_waveForm, auxAttribute);
+
+	// --- controlID::osc4_BankIndex
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::osc4_BankIndex, auxAttribute);
+
+	// --- controlID::EG1_attackTime_mSec
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::EG1_attackTime_mSec, auxAttribute);
+
+	// --- controlID::EG1_decayTime_mSec
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::EG1_decayTime_mSec, auxAttribute);
+
+	// --- controlID::EG1_sustainLevel
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::EG1_sustainLevel, auxAttribute);
+
+	// --- controlID::EG1_releaseTime_mSec
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::EG1_releaseTime_mSec, auxAttribute);
+
+	// --- controlID::EG1_holdTime_mSec
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::EG1_holdTime_mSec, auxAttribute);
+
+	// --- controlID::EG1_delayTime_mSec
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(2147483648);
+	setParamAuxAttribute(controlID::EG1_delayTime_mSec, auxAttribute);
+
+	// --- controlID::EG1_mode
+	auxAttribute.reset(auxGUIIdentifier::guiControlData);
+	auxAttribute.setUintAttribute(805306368);
+	setParamAuxAttribute(controlID::EG1_mode, auxAttribute);
 
 
 	// **--0xEDA5--**
@@ -307,19 +456,42 @@ void PluginCore::updateParameters()
 
 	engineParams.voiceParameters->lfo1Parameters->waveShapeX = waveShapeY;
 
-	//engineParams.voiceParameters->osc1Parameters->
-
+	//osc1
 	engineParams.voiceParameters->osc1Parameters->oscillatorWaveformIndex = osc1_waveForm;
 
 	engineParams.voiceParameters->osc1Parameters->oscillatorBankIndex = osc1_BankIndex;
 
 
+	//osc2
+	engineParams.voiceParameters->osc2Parameters->oscillatorWaveformIndex = osc2_waveForm;
+
+	engineParams.voiceParameters->osc2Parameters->oscillatorBankIndex = osc2_BankIndex;
+
+	//osc3
+	engineParams.voiceParameters->osc3Parameters->oscillatorWaveformIndex = osc3_waveForm;
+
+	engineParams.voiceParameters->osc3Parameters->oscillatorBankIndex = osc3_BankIndex;
+
+	//osc4
+	engineParams.voiceParameters->osc4Parameters->oscillatorWaveformIndex = osc4_waveForm;
+
+	engineParams.voiceParameters->osc4Parameters->oscillatorBankIndex = osc4_BankIndex;
 
 	
 	
 	//LFO2
 	engineParams.voiceParameters->lfo2Parameters->frequency_Hz = lfo2Frequency;
 
+	//engineParams.masterUnisonDetune_Cents = detune;
+
+	//EG
+	engineParams.voiceParameters->ampEGParameters->attackTime_mSec = EG1_attackTime_mSec;
+	engineParams.voiceParameters->ampEGParameters->decayTime_mSec = EG1_decayTime_mSec;
+	engineParams.voiceParameters->ampEGParameters->sustainLevel = EG1_sustainLevel;
+	engineParams.voiceParameters->ampEGParameters->releaseTime_mSec = EG1_releaseTime_mSec;
+	engineParams.voiceParameters->ampEGParameters->holdTime_mSec = EG1_holdTime_mSec;
+	engineParams.voiceParameters->ampEGParameters->delayTime_mSec = EG1_delayTime_mSec;
+	engineParams.voiceParameters->ampEGParameters->egContourType = convertIntToEnum(EG1_mode, egType);
 
 	// --- THE update - this trickles all param updates
 	// via the setParameters( ) of each
@@ -730,6 +902,10 @@ NOTES:
 */
 bool PluginCore::setVectorJoystickParameters(const VectorJoystickData& vectorJoysickData)
 {
+	SynthEngineParameters engineParams = synthEngine.getParameters();
+	engineParams.voiceParameters->vectorJSData = vectorJoysickData;
+	synthEngine.setParameters(engineParams);
+
 	return true;
 }
 
@@ -767,6 +943,19 @@ bool PluginCore::initPluginPresets()
 	setPresetParameter(preset->presetParameters, controlID::waveShapeY, 0.500000);
 	setPresetParameter(preset->presetParameters, controlID::osc1_waveForm, -0.000000);
 	setPresetParameter(preset->presetParameters, controlID::osc1_BankIndex, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::osc2_waveForm, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::osc2_BankIndex, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::osc3_waveForm, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::osc3_BankIndex, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::osc4_waveForm, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::osc4_BankIndex, -0.000000);
+	setPresetParameter(preset->presetParameters, controlID::EG1_attackTime_mSec, 1.000000);
+	setPresetParameter(preset->presetParameters, controlID::EG1_decayTime_mSec, 100.000000);
+	setPresetParameter(preset->presetParameters, controlID::EG1_sustainLevel, 0.707000);
+	setPresetParameter(preset->presetParameters, controlID::EG1_releaseTime_mSec, 1000.000000);
+	setPresetParameter(preset->presetParameters, controlID::EG1_holdTime_mSec, 0.000000);
+	setPresetParameter(preset->presetParameters, controlID::EG1_delayTime_mSec, 0.000000);
+	setPresetParameter(preset->presetParameters, controlID::EG1_mode, -0.000000);
 	addPreset(preset);
 
 

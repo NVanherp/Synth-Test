@@ -71,6 +71,8 @@ protected:
 	// --- currently selected wavetable
 	IWaveBank* selectedWaveBank = nullptr;
 
+	IWaveTable* selectedWaveTable = nullptr;
+
 	uint32_t bankSet = BANK_SET_0;
 
 	// --- for anything
